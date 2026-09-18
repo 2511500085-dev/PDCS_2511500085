@@ -1,14 +1,20 @@
 [
-  {
-    "id": 1,
-    "nim": "2511500085",
-    "nama": "irsya eva safitri",
-    "jurusan": "Teknik Informatika"
-  },
-  {
-    "id": 2,
-    "nim": "2511500083",
-    "nama": "salsabilla agustin",
-    "jurusan": "Teknik Informatika"
-  }
+    {
+        "id": 1,
+        "nim": "2511500085",
+        "nama": "irsya eva safitri",
+        "jurusan": "Teknik Informatika"
+    },
+    {
+        "id": 2,
+        "nim": "2511500083",
+        "nama": "salsabilla agustin",
+        "jurusan": "Teknik Informatika"
+    },
+    {
+        "id": 3,
+        "nim": "2511500085",
+        "nama": "irsya eva safitri",
+        "jurusan": "Teknik Informatika"
+    }
 ]
