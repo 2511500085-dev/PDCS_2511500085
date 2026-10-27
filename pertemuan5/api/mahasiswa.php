@@ -8,28 +8,26 @@ $method = $_SERVER['REQUEST_METHOD'];
 switch ($method) {
     case 'GET' :
         if (isset($_GET['id'])) {
-        $id = $_GET['id'];
+        $id = (int) ($_GET['id'] ?? 0);
 
-        $q = "SELECT 
+        $stmt = mysqli_prepare(
+            $koneksi,
+            "SELECT 
             m.id, 
             m.nama, 
             m.nim, 
             j.nama_jurusan AS jurusan
         FROM mahasiswa m
         LEFT JOIN jurusan j ON m.jurusan_id = j.id
-        WHERE m.id = '$id'";
-
-        $r = mysqli_query($koneksi, $q);
-
-        if (!$r) {
-        sendResponse(
-            false,
-            "query gagal: " . mysqli_error($koneksi),
-            null,
-            500
+        WHERE m.id = ?"
         );
-        }
 
+        mysqli_stmt_bind_param($stmt, "i", $id);
+        mysqli_stmt_execute($stmt);
+        $r = mysqli_stmt_get_result($stmt);
+
+        if (!$r) 
+            gagalQuery($koneksi);
         $data = mysqli_fetch_assoc($r);
 
         if(!$data) {
@@ -204,7 +202,24 @@ switch ($method) {
             sendResponse(False, mysqli_error($koneksi), null, 500);
         }
    
-    break;
+
+    //INSERT DATA
+
+    $stmt = mysqli_prepare(
+            $koneksi,
+            "INSERT INTO mahasiswa (nama,nim,jurusan_id,created_at)
+            VALUE (?, ?, ?, CURDATE())"
+        );
+
+        mysqli_stmt_bind_param($stmt, "ssi", $nama, $nim, $jurusan_id);
+         
+        if (mysqli_stmt_execute($stmt)) {
+            sendResponse(true, "data tersimpan", ["id" =. mysqli_insert_id($koneksi)],
+            201);
+        } else {
+            gagalQuery($koneksi);
+        }
+    break;  
 
     default :
        sendResponse(false, "method tidak diijinkan", null, 405);
